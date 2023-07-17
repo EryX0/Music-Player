@@ -9,6 +9,7 @@ RUN npm ci --production && npm cache clean --force
 COPY . .
 
 RUN npm install --only=development
+RUN npm install -g webpack-cli
 RUN npm run build
 
 CMD ["node", "dist/bundle.js"]
