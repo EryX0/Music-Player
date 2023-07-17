@@ -8,4 +8,6 @@ RUN npm ci --production && npm cache clean --force
 
 COPY . .
 
-CMD ["node", "app.js"]
+RUN npm run build
+
+CMD ["node", "dist/bundle.js"]
