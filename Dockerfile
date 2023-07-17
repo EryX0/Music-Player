@@ -1,24 +1,22 @@
 FROM node:slim as base
+
 ENV NODE_ENV=production
 WORKDIR /app
+
 COPY package*.json ./
-RUN npm ci \
-    && npm cache clean --force
-ENV PATH /app/node_modules/.bin:$PATH
+RUN npm ci --production && npm cache clean --force
 
-# a dev and build-only stage. we don't need to 
-# copy in code since we bind-mount it
-FROM base as dev
-ENV NODE_ENV=development
-RUN npm install
-CMD ["/app/node_modules/.bin/nodemon"]
-
-FROM dev as build
 COPY . .
-RUN tsc
-# you would also run your tests here
 
-# this only has minimal deps and files
+# Build stage
+FROM base as build
+WORKDIR /app
+RUN npm install
+RUN npm run build
+
+# Production stage
 FROM base as prod
-COPY --from=build /app/dist/ .
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+
 CMD ["node", "dist/bundle.js"]
