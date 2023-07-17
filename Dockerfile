@@ -12,6 +12,7 @@ COPY . .
 FROM base as build
 WORKDIR /app
 RUN npm install
+RUN npm install -D webpack webpack-cli
 RUN npm run build
 
 # Production stage
