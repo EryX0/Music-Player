@@ -21,4 +21,4 @@ RUN tsc
 # this only has minimal deps and files
 FROM base as prod
 COPY --from=build /app/dist/ .
-CMD ["node", "app.js"]
+CMD ["node", "dist/bundle.js"]
