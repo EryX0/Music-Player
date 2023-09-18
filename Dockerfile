@@ -1,5 +1,5 @@
 FROM node:18.17.1-alpine3.18 AS builder
-COPY ./package*.json ./yarn.lock ./craco.config.js ./app
+COPY ./package.json ./package-lock.json ./tsconfig.json ./webpack.config.js ./app
 WORKDIR /app/
 RUN yarn install
 COPY . ./
