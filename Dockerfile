@@ -3,9 +3,10 @@ RUN mkdir /app/
 COPY ./package.json ./package-lock.json ./tsconfig.json ./webpack.config.js /app/
 WORKDIR /app/
 RUN yarn install
-COPY . ./
+COPY ./* /app/
 RUN yarn add typescript
 RUN yarn build
+RUN ls
 
 FROM nginx:1.25.2-alpine as production
 COPY --from=builder /app/build /music-player
