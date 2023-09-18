@@ -1,6 +1,7 @@
 FROM node:18.17.1-alpine3.18 AS builder
 RUN mkdir /app/
 COPY ./package.json ./package-lock.json ./tsconfig.json ./webpack.config.js /app/
+RUN ls
 WORKDIR /app/
 RUN yarn install
 COPY ./* /app/
