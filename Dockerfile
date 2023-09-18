@@ -1,11 +1,12 @@
-FROM node:slim as base
+FROM node:18.17.1-alpine3.18 AS builder
+COPY ./package*.json ./yarn.lock ./craco.config.js ./app
+WORKDIR /app/
+RUN yarn install
+COPY . ./
+RUN yarn build
 
-ENV NODE_ENV=production
-WORKDIR /app
-
-COPY package*.json ./
-RUN npm ci --production && npm cache clean --force
-
-COPY dist ./
-
-CMD ["node", "bundle.js"]
+FROM nginx:1.25.2-alpine as production
+COPY --from-builder=/app/build /music-player
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
